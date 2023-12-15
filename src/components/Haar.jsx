@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Grid, Paper, Typography } from '@mui/material';
-import axios from 'axios';
+import baseApi from '../api/baseApi';
 
 export const Haar = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -17,12 +17,7 @@ export const Haar = () => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://127.0.0.1:8000/process_haar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        responseType: 'arraybuffer',
-      })
+      baseApi.post('/process_haar', formData)
       .then((res) => {
         const blob = new Blob([res.data], { type: 'image/png' });
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Container, Grid, Paper, Typography } from '@mui/material';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
+import baseApi from "../api/baseApi";
 
 export const Walsh = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,23 +15,19 @@ export const Walsh = () => {
   const handleUpload = () => {
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append("file", selectedFile);
 
-      axios.post('http://127.0.0.1:8000/process_walsh', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        responseType: 'arraybuffer',
-      })
-      .then((res) => {
-        const blob = new Blob([res.data], { type: 'image/png' });
+      baseApi
+        .post("/process_walsh", formData)
+        .then((res) => {
+          const blob = new Blob([res.data], { type: "image/png" });
 
-        const imageUrl = URL.createObjectURL(blob);
-        setProcessedImage(imageUrl);
-      })
-      .catch((err) => console.log(err));
+          const imageUrl = URL.createObjectURL(blob);
+          setProcessedImage(imageUrl);
+        })
+        .catch((err) => console.log(err));
     } else {
-      console.log('No file selected');
+      console.log("No file selected");
     }
   };
 
@@ -52,21 +48,39 @@ export const Walsh = () => {
       </Grid>
 
       {processedImage && selectedFile && (
-        <Grid container spacing={2} style={{ marginTop: '20px' }}>
+        <Grid container spacing={2} style={{ marginTop: "20px" }}>
           <Grid item xs={6}>
             <Paper elevation={3}>
-              <Typography variant="h6" component="div" align="center" gutterBottom>
+              <Typography
+                variant="h6"
+                component="div"
+                align="center"
+                gutterBottom
+              >
                 Original Image
               </Typography>
-              <img src={URL.createObjectURL(selectedFile)} alt="Original" style={{ width: '100%' }} />
+              <img
+                src={URL.createObjectURL(selectedFile)}
+                alt="Original"
+                style={{ width: "100%" }}
+              />
             </Paper>
           </Grid>
           <Grid item xs={6}>
             <Paper elevation={3}>
-              <Typography variant="h6" component="div" align="center" gutterBottom>
+              <Typography
+                variant="h6"
+                component="div"
+                align="center"
+                gutterBottom
+              >
                 Processed Image
               </Typography>
-              <img src={processedImage} alt="Processed" style={{ width: '100%' }} />
+              <img
+                src={processedImage}
+                alt="Processed"
+                style={{ width: "100%" }}
+              />
             </Paper>
           </Grid>
         </Grid>

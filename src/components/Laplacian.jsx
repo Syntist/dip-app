@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
+import baseApi from "../api/baseApi";
 
 export const Laplacian = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -25,17 +25,8 @@ export const Laplacian = () => {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      axios
-        .post(
-          `http://127.0.0.1:8000/process_laplacian?sigma=${sigma}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            responseType: "arraybuffer",
-          }
-        )
+      baseApi
+        .post(`/process_laplacian?sigma=${sigma}`, formData)
         .then((res) => {
           const blob = new Blob([res.data], { type: "image/png" });
 
